@@ -28,6 +28,7 @@ def url(s, session=None):
 		return requests.get(s)
 	return session.get(s)
 
+
 class cryptohack(sock):
 	def connect(self, port, *args, **kwargs):
 		super().connect(("socket.cryptohack.org", port), *args, **kwargs)

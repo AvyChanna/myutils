@@ -7,7 +7,7 @@ from setuptools import setup
 
 setup(
     name="myutils",
-    version="0.0.1",
+    version="0.0.2",
     description="h2g2's crypto utils package",
     long_description="h2g2's crypto utils package",
     url="https://github.com/AvyChanna/myutils",
