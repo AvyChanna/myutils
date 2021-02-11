@@ -29,7 +29,7 @@ import requests
 from .conversion import (a2b, a2h, a2i, b2a, b2h, b2i, convert, h2a, h2b, h2i, i2a, i2b, i2h, norm_hex)
 from .ec import ec_curve, ec_point
 from .multicomp import run_cmd, run_with_timeout, worker
-from .networking import sock, url
+from .networking import sock, url, cryptohack
 from .pretty_print import pprint
 from .pycrypto import *
 from .qr import qr
