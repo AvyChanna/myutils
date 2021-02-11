@@ -1,25 +1,35 @@
+import json
 import socket
 
 import requests
 
 
 class sock(socket.socket):
-	def __init__(self, *args, timeout: int = 2, **kwargs):
+	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
+		self.timeout()
+
+	def timeout(self, timeout=2):
 		self.settimeout(timeout)
 
-	def cin(self) -> bytes:
-		return self.recv(5000)
+	def raw_cin(self, length=5000):
+		return self.recv(length)
+
+	def cin(self, length=5000):
+		return self.raw_cin(length).decode('latin-1')
+
+	def cin_json(self, length=5000):
+		return json.loads(self.cin(length))
 
 	def cout_nl(self, s):
 		if not isinstance(s, bytes):
-			s = str(s).encode('latin-1')
+			s = json.dumps(s).encode('latin-1')
 		s += b'\n'
 		self.sendall(s)
 
 	def cout(self, s):
 		if not isinstance(s, bytes):
-			s = str(s).encode('latin-1')
+			s = json.dumps(s).encode('latin-1')
 		self.sendall(s)
 
 
