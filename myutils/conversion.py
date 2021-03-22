@@ -64,7 +64,7 @@ def a2h(data: List[int]):
 def a2b(data: List[int]):
 	while data[0] == 0:
 		data = data[1:]
-	return bytes([i for i in data])
+	return bytes(data)
 
 
 def convert(func, data):
@@ -74,17 +74,18 @@ def convert(func, data):
 		if src == 'i':
 			return globals()[func](int(joined_data))
 
-		elif src == 'h':
+		if src == 'h':
 			return globals()[func](joined_data)
 
-		elif src == 'b':
+		if src == 'b':
 			# data = re.sub(r"\\x([0123456789abcdefABCDEF]{2})", lambda x:chr(int(x.group()[2:],16)), joined_data)
 			return globals()[func](joined_data.encode('latin1').decode("unicode-escape").encode("latin-1"))
 
-		elif src == 'a':
+		if src == 'a':
 			if ',' in joined_data:
 				return globals()[func]([int(i) for i in data.split(",")])
 			else:
 				return globals()[func]([int(i) for i in data])
 	except:  # pylint: disable=bare-except
 		traceback.print_exc()
+	return None
