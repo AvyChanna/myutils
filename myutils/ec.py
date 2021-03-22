@@ -1,6 +1,6 @@
 from collections import namedtuple
 
-from utils import isprime, modinv, polyroots_prime, sqrtmod_prime
+from labmath import isprime, modinv, polyroots_prime, sqrtmod_prime
 
 class ec_point(namedtuple("ec_point", "x y z", defaults=(1, ))):
 	def is_origin(self):
