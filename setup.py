@@ -26,6 +26,7 @@ setup(
     # install_requires=install_reqs,
     install_requires=[
         "gmpy2",
+        "more_itertools",
         "requests",
         "labmath",
         "pyzxing",
