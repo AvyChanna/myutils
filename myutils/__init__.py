@@ -15,7 +15,7 @@ import sys
 import time
 from base64 import b64decode, b64encode
 from collections import Counter, namedtuple, defaultdict
-from functools import reduce, cache, lru_cache
+from functools import reduce, lru_cache, partial, total_ordering
 from hashlib import md5, sha1, sha256
 from itertools import cycle, islice
 from json import dumps as pp
