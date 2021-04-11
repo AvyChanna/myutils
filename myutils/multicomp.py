@@ -5,7 +5,7 @@ from subprocess import run
 
 
 class worker:
-	def __init__(self, function, iterable, workers=len(os.sched_getaffinity(0)), chunksize=1000):
+	def __init__(self, function, iterable, workers=1, chunksize=1000):
 		self.pool = None
 		self.workers = workers
 		self.function = function
