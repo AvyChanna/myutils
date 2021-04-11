@@ -5,7 +5,7 @@ import labmath as lm
 
 class rsa:  # pylint: disable=too-many-instance-attributes
 	def _has_n_p(self):
-		self.q = self.n // self.q
+		self.q = self.n // self.p
 		self.after_factoring()
 
 	def _has_n_only(self):
