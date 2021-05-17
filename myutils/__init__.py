@@ -31,7 +31,7 @@ from . import collisions
 from .conversion import a2b, a2h, a2i, b2a, b2h, b2i, convert, h2a, h2b, h2i, i2a, i2b, i2h, norm_hex
 from .ec import ec_curve, ec_point
 from .lm import *
-from .misc import bxor
+from .misc import bxor, wr
 from .multicomp import run_cmd, run_with_timeout, worker
 from .networking import cryptohack, sock, url
 from .pretty_print import pprint
