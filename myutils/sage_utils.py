@@ -51,7 +51,7 @@ def add_sage_to_path(root=None):
 	}
 	os.environ.update(paths)
 	try:
-		import sage.all  # pylint: disable=unused-import, import-error, import-outside-toplevel
-	except:  # pylint: disable=bare-except
+		import sage.all
+	except:
 		traceback.print_exc()
 	return True

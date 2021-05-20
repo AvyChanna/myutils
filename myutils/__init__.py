@@ -14,18 +14,16 @@ import struct
 import sys
 import time
 from base64 import b64decode, b64encode
-from collections import Counter, namedtuple, defaultdict
-from functools import reduce, lru_cache, partial, total_ordering
+from collections import Counter, defaultdict, namedtuple
+from functools import lru_cache, partial, reduce, total_ordering
 from hashlib import md5, sha1, sha256
 from itertools import cycle, islice
-from json import dumps as pp
 from multiprocessing import Pool
-from textwrap import wrap, dedent
+from textwrap import dedent, wrap
 
 import gmpy2 as gmp
 import more_itertools as mit
 import requests
-
 
 from . import collisions
 from .conversion import a2b, a2h, a2i, b2a, b2h, b2i, convert, h2a, h2b, h2i, i2a, i2b, i2h, norm_hex
@@ -34,8 +32,7 @@ from .lm import *
 from .misc import bxor, wr
 from .multicomp import run_cmd, run_with_timeout, worker
 from .networking import cryptohack, sock, url
-from .pretty_print import pprint
-from .pycrypto import *
+from .pycrypto import AES, PKCS_15, PKCS_OAEP, RSA, bytes_to_long, long_to_bytes, pad, unpad
 from .qr import qr
 from .rsa import multi_rsa, rsa
 from .sage_utils import add_sage_to_path, sage_code

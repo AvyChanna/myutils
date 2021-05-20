@@ -11,28 +11,31 @@
 # (Kali has 'Cryptodome', coz it has both of them installed.)
 
 try:
-	from Cryptodome.Cipher import AES  # pylint: disable=unused-import
-	from Cryptodome.Cipher import PKCS1_OAEP as PKCS_OAEP  # pylint: disable=unused-import
-	from Cryptodome.Cipher import PKCS1_v1_5 as PKCS_15  # pylint: disable=unused-import
-	from Cryptodome.Util.number import bytes_to_long, long_to_bytes  # pylint: disable=unused-import
-	from Cryptodome.Util.Padding import pad  # pylint: disable=unused-import
-	from Cryptodome.Util.Padding import unpad  # pylint: disable=unused-import
+	from Cryptodome.Cipher import AES
+	from Cryptodome.Cipher import PKCS1_OAEP as PKCS_OAEP
+	from Cryptodome.Cipher import PKCS1_v1_5 as PKCS_15
+	from Cryptodome.PublicKey import RSA
+	from Cryptodome.Util.number import bytes_to_long, long_to_bytes
+	from Cryptodome.Util.Padding import pad
+	from Cryptodome.Util.Padding import unpad
 except:  # pylint: disable=bare-except
 	# Try importing 'Crypto' instead (works for both)
-	from Crypto.Cipher import AES  # type: ignore
-	from Crypto.Cipher import PKCS1_OAEP as PKCS_OAEP  # type: ignore
-	from Crypto.Cipher import PKCS1_v1_5 as PKCS_15  # type: ignore
-	from Crypto.Util.number import bytes_to_long, long_to_bytes  # type: ignore
+	from Crypto.Cipher import AES
+	from Crypto.Cipher import PKCS1_OAEP as PKCS_OAEP
+	from Crypto.Cipher import PKCS1_v1_5 as PKCS_15
+	from Crypto.PublicKey import RSA
+	from Crypto.Util.number import bytes_to_long, long_to_bytes
+	from Crypto.Util.number import 
 
 	# PyCryptodome has pad/unpad builtin. Import them.
 	try:
-		from Crypto.Util.Padding import pad, unpad  # type: ignore
+		from Crypto.Util.Padding import pad, unpad
 	except:
 		# If using PyCrypto, define them ourselves
 		from Crypto.Util.py3compat import bchr, bord
 
 		# Block size is set to 16, original one did not have any default one.
-		def pad(data_to_pad, block_size=16, style='pkcs7'):  # type: ignore
+		def pad(data_to_pad, block_size=16, style='pkcs7'):
 			"""Apply standard padding.
 			:Parameters:
 			data_to_pad : byte string
