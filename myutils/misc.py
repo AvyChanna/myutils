@@ -24,3 +24,8 @@ def blockize(data, k=16):
 def wr(data):
 	with open("a.txt", "wb") as f:
 		f.write(data)
+
+class ddict(dict):
+	__getattr__ = dict.get
+	__setattr__ = dict.__setitem__
+	__delattr__ = dict.__delitem__

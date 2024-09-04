@@ -15,15 +15,26 @@ import sys
 import time
 from base64 import b64decode, b64encode
 from collections import Counter, defaultdict, namedtuple
-from functools import lru_cache, partial, reduce, total_ordering
+from functools import cache, lru_cache, partial, reduce, total_ordering
 from hashlib import md5, sha1, sha256
 from itertools import cycle, islice
 from multiprocessing import Pool
 from textwrap import dedent, wrap
 
-import gmpy2 as gmp
 import more_itertools as mit
 import requests
+
+from Crypto.Cipher import AES
+from Crypto.Cipher import PKCS1_OAEP as PKCS_OAEP
+from Crypto.Cipher import PKCS1_v1_5 as PKCS_15
+from Crypto.PublicKey import RSA
+from Crypto.Util.number import bytes_to_long, long_to_bytes
+from Crypto.Util.Padding import pad, unpad
+
+try:
+	import gmpy2 as gmp
+except:
+	pass
 
 from . import collisions
 from .conversion import a2b, a2h, a2i, b2a, b2h, b2i, convert, h2a, h2b, h2i, i2a, i2b, i2h, norm_hex
