@@ -2,64 +2,115 @@ import json
 import socket
 import sys
 
+from typing import Optional
+
 import requests
 
 
-class sock(socket.socket):
-	def __init__(self, *args, **kwargs):
-		super().__init__(*args, **kwargs)
-		self.timeout()
+class Remote:
+	def __init__(self, ip, port):
+		self.sock = socket.socket()
+		self.ip = ip
+		self.port = port
+		self._open = False
+		self.sock.connect((ip, port))
+		self._open = True
+		self.newline = b"\n"
 
-	def timeout(self, timeout=2):
-		self.settimeout(timeout)
+	def __repr__(self):
+		return "<{0} ({1}:{2}) at {3}>".format(
+			self.__class__.__name__, self.ip, self.port, hex(id(self))
+		)
 
-	def raw_cin(self, length=5000):
-		return self.recv(length)
+	def close(self):
+		self.sock.close()
+		self._open = False
 
-	def cin(self, length=5000):
-		return self.raw_cin(length).decode('latin-1')
+	def is_open(self):
+		return self._open
 
-	def cin_json(self, length=5000):
-		return json.loads(self.cin(length))
+	def read(self, n):
+		assert self.is_open()
+		return self.sock.recv(n)
 
-	def cout(self, b):
-		self.sendall(b)
-
-	def cout_bytes(self, s_bytes, break_data=0, end=b"\n"):
-		s_bytes += end
-		if break_data > 0:
-			for i in range(0, len(s_bytes), break_data):
-				self.send(s_bytes[i:i + break_data])
+	def write(self, buf):
+		assert self.is_open()
+		if isinstance(buf, str):
+			return self.sock.send(bytes(buf.encode("latin-1")))
+		elif isinstance(buf, (bytes, bytearray)):
+			return self.sock.send(buf)
 		else:
-			self.sendall(s_bytes)
+			raise NotImplementedError("Unsupported buffer type {0}".format(type(buf)))
 
-	def cout_json(self, s, break_data=0, json_encoder=None, end=b"\n"):
-		if not isinstance(s, bytes):
-			try:
-				s_bytes = json.dumps(s, cls=json_encoder).encode('latin-1')
-			except TypeError:
-				if json_encoder is not None:
-					print("Encoder didn't do a flying shit to your class. Shame on you", file=sys.stderr)
-				else:
-					print("Consider writing an encode for your class", file=sys.stderr)
-				s_list = filter(lambda x: not x.startswith("_"), dir(s))
-				s_dict = {}
-				for i in s_list:
-					temp = getattr(s, i)
-					if not callable(temp):
-						s_dict[i] = temp
-				s_bytes = json.dumps(s_dict, cls=json_encoder).encode('latin-1')
+	def send(self, buf):
+		self.write(buf)
+
+	def sendline(self, line):
+		if isinstance(line, (bytes, bytearray)):
+			self.write(line + self.newline)
+		elif isinstance(line, str):
+			self.write(line + "\n")
 		else:
-			s_bytes = s
-		self.cout_bytes(s_bytes, break_data, end)
+			raise NotImplementedError("Unsupported buffer type {0}".format(type(line)))
+
+	def sendjson(self, data, json_kwargs=None):
+		data_json = data
+		data_str = ""
+		if json_kwargs is None:
+			json_kwargs = {}
+
+		if not isinstance(data, dict):
+			# generic objects to json
+			s_list = filter(lambda x: not x.startswith("_"), dir(data))
+			s_dict = {}
+			for i in s_list:
+				temp = getattr(data, i)
+				if not callable(temp):
+					s_dict[i] = temp
+			data_json = s_dict
+
+		try:
+			data_str = json.dumps(data_json, **json_kwargs)
+		except TypeError as t:
+			if json_kwargs.get("encoder", None) is None:
+				print("You gave me a shitty encoder. Shame on you", file=sys.stderr)
+			else:
+				print("Data not serializable. Maybe write an encoder?", file=sys.stderr)
+			raise t
+
+		self.sendline(data_str)
+
+	def recv(self, n):
+		return self.read(n)
+
+	def recvn(self, n):
+		buf = self.read(n)
+		if len(buf) != n:
+			raise (ValueError("Incomplete socket read"))
+		return buf
+
+	def recvall(self, n=0x100000):
+		return self.read(n)
+
+	def recvuntil(self, delim, drop=False):
+		buf = b""
+		while delim not in buf:
+			buf += self.recvn(1)
+		return buf if not drop else buf[: -len(delim)]
+
+	def recvline(self, drop=True):
+		return self.recvuntil(self.newline, drop)
+
+	def recvjson(self):
+		return json.loads(self.recvline())
 
 
-def url(s, session=None):
+class Cryptohack(Remote):
+	def __init__(self, port):
+		super().__init__("socket.cryptohack.org", port)
+
+
+def url(s, method="get", session: Optional[requests.Session] = None):
 	if session is None:
-		return requests.get(s)
-	return session.get(s)
-
-
-class cryptohack(sock):
-	def connect(self, port, *args, **kwargs):
-		super().connect(("socket.cryptohack.org", port), *args, **kwargs)
+		return requests.request(method, s)
+	return session.request(method, s)
