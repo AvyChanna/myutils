@@ -2,7 +2,7 @@ import traceback
 from textwrap import wrap
 from typing import List
 
-from .pycrypto import bytes_to_long, long_to_bytes
+from Crypto.Util.number import bytes_to_long, long_to_bytes
 
 
 def norm_hex(data):
