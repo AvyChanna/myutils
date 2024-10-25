@@ -43,7 +43,6 @@ from .lm import *
 from .misc import bxor, bxor_cyclic, blockize, wr
 from .multicomp import run_cmd, run_with_timeout, worker
 from .networking import cryptohack, sock, url
-from .pycrypto import AES, PKCS_15, PKCS_OAEP, RSA, bytes_to_long, long_to_bytes, pad, unpad
 from .qr import qr
 from .rsa import multi_rsa, rsa
 from .sage_utils import add_sage_to_path, sage_code
