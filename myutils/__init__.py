@@ -42,7 +42,7 @@ from .ec import ec_curve, ec_point
 from .lm import *
 from .misc import bxor, bxor_cyclic, blockize, wr
 from .multicomp import run_cmd, run_with_timeout, worker
-from .networking import cryptohack, sock, url
+from .networking import Cryptohack, Remote, url
 from .qr import qr
 from .rsa import multi_rsa, rsa
 from .sage_utils import add_sage_to_path, sage_code
